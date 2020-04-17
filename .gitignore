@@ -3,5 +3,5 @@
 **.iml
 **/target
 #Maven
-**/log/
+**/.log
 **/target/
