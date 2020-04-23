@@ -34,11 +34,11 @@ public class BanknoteStorage {
         }
     }
 
-    public void insertDollars(BanknotesDenomination denomination, int count) {
-        if (denomination != BanknotesDenomination.EMPTY) {
+    public void insertDollars(BanknotesDenomination denomination, int count) throws BanknoteException {
+        if (denomination != BanknotesDenomination.EMPTY && count > 0) {
             dollarsMap.put(denomination, dollarsMap.get(denomination) + count);
             log.info(count + " banknote's " + denomination.name() + " dollar('s)  inserted");
-        } else log.error("bill collector is empty");
+        } else throw new BanknoteException("bill collector is empty");
     }
 
     public long getSumDollars() {
@@ -46,12 +46,10 @@ public class BanknoteStorage {
         return dollarsMap.keySet().stream().mapToLong(key -> key.getValue() * dollarsMap.get(key)).sum();
     }
 
-    public HashMap<BanknotesDenomination, Integer> getDollars(BanknotesDenomination denomination, int count) {
+    public HashMap<BanknotesDenomination, Integer> getDollars(BanknotesDenomination denomination, int count) throws BanknoteException {
         HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
-        if (denomination.equals(BanknotesDenomination.EMPTY) || dollarsMap.get(denomination) == 0
-                || dollarsMap.get(denomination) - count < 0) {
-            dollars.put(BanknotesDenomination.EMPTY, 0);
-            log.error("Not enough bills in the banknote storage");
+        if (denomination.equals(BanknotesDenomination.EMPTY) || count <= 0 || dollarsMap.get(denomination) - count < 0) {
+            throw new BanknoteException("Not enough bills in the banknote storage or incorrect amount requested");
         } else {
             dollarsMap.put(denomination, dollarsMap.get(denomination) - count);
             dollars.put(denomination, count);
@@ -71,16 +69,11 @@ public class BanknoteStorage {
             int billsCount = sum / denomination;
             if (billsCount == 0) continue;
             BanknotesDenomination mapKey = dollarsMap.keySet().stream().filter(key -> key.getValue() == denomination).findFirst().get();
-            if (dollarsMap.get(mapKey) >= billsCount) {
-                dollarsMap.put(mapKey, dollarsMap.get(mapKey) - billsCount);
-                dollars.put(mapKey, billsCount);
-                sum -= denomination * billsCount;
-            } else { //если не хватает, то выдаем сколько есть
-                billsCount = dollarsMap.get(mapKey);
-                dollarsMap.put(mapKey, dollarsMap.get(mapKey) - billsCount);
-                dollars.put(mapKey, billsCount);
-                sum -= denomination * billsCount;
-            }
+            if (dollarsMap.get(mapKey) < billsCount)
+                billsCount = dollarsMap.get(mapKey); //if not enough, take how much is
+            dollarsMap.put(mapKey, dollarsMap.get(mapKey) - billsCount);
+            dollars.put(mapKey, billsCount);
+            sum -= denomination * billsCount;
         }
         return dollars;
     }
