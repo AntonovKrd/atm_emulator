@@ -6,12 +6,11 @@ import org.apache.log4j.Logger;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BanknoteStorage {
     private final static Logger log = Logger.getLogger(BanknoteStorage.class);
-    private final Map<BanknotesDenomination, Integer> dollarsMap;
+    private final HashMap<BanknotesDenomination, Integer> dollarsMap;
 
     public BanknoteStorage(int oneDollarsCount, int twoDollarsCount, int fiveDollarsCount, int tenDollarsCount,
                            int twentyDollarsCount, int fiftyDollarsCount, int oneHundredDollarsCount) throws BanknoteException {
@@ -32,6 +31,10 @@ public class BanknoteStorage {
         if (dollarsMap.entrySet().stream().anyMatch(e -> e.getValue() < 0)) {
             throw new BanknoteException("Incorrect counts banknotes");
         }
+    }
+
+    public HashMap<BanknotesDenomination, Integer> getAllDollars() {
+        return dollarsMap;
     }
 
     public void insertDollars(BanknotesDenomination denomination, int count) throws BanknoteException {

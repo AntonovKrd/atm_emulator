@@ -32,6 +32,12 @@ public class TestBanknoteStorage {
     }
 
     @Test
+    public void testGetAllDollars() throws BanknoteException {
+        assertEquals(new BanknoteStorage(5, 5, 5, 5, 5, 5, 5)
+                .getAllDollars(), banknoteStorage.getAllDollars());
+    }
+
+    @Test
     public void testGetDollars() throws BanknoteException {
         HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
         dollars.put(BanknotesDenomination.ONE, 2);
