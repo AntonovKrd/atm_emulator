@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BanknoteStorage {
     private final static Logger log = Logger.getLogger(BanknoteStorage.class);
     private final Map<BanknotesDenomination, Integer> dollarsMap;
-    private final Integer[] denominations = {1, 2, 5, 10, 20, 50, 100};
 
     public BanknoteStorage(int oneDollarsCount, int twoDollarsCount, int fiveDollarsCount, int tenDollarsCount,
                            int twentyDollarsCount, int fiftyDollarsCount, int oneHundredDollarsCount) throws BanknoteException {
@@ -41,8 +40,9 @@ public class BanknoteStorage {
 
     public long getSumDollars() {
         AtomicInteger multiplier = new AtomicInteger();
+        BanknotesDenomination[] values = BanknotesDenomination.values();
         log.info("the amount of the banknote storage is displayed");
-        return dollarsMap.values().stream().mapToLong(integer -> integer * denominations[multiplier.getAndIncrement()]).sum();
+        return dollarsMap.values().stream().mapToLong(integer -> integer * values[multiplier.getAndIncrement()].getValue()).sum();
     }
 
     public HashMap<BanknotesDenomination, Integer> getDollars(BanknotesDenomination denomination, int count) {
