@@ -76,12 +76,17 @@ public class TestBanknoteStorage {
     }
 
     @Test
-    public void getMinBillsDollars() {
+    public void getMinBillsDollars() throws BanknoteException {
         HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
         dollars.put(BanknotesDenomination.FIFTY, 1);
         dollars.put(BanknotesDenomination.TWENTY, 2);
         dollars.put(BanknotesDenomination.FIVE, 1);
         dollars.put(BanknotesDenomination.TWO, 2);
         assertEquals(dollars, banknoteStorage.getMinBillsDollars(99));
+    }
+
+    @Test
+    public void getMinBillsDollarsOver() {
+        assertThrows(BanknoteException.class, () -> banknoteStorage.getMinBillsDollars(941));
     }
 }

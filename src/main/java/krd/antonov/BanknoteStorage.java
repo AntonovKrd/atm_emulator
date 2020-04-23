@@ -3,6 +3,8 @@ package krd.antonov;
 import krd.antonov.exceptions.BanknoteException;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -21,6 +23,7 @@ public class BanknoteStorage {
         this.dollarsMap.put(BanknotesDenomination.TWENTY, twentyDollarsCount);
         this.dollarsMap.put(BanknotesDenomination.FIFTY, fiftyDollarsCount);
         this.dollarsMap.put(BanknotesDenomination.ONE_HUNDRED, oneHundredDollarsCount);
+        this.dollarsMap.put(BanknotesDenomination.EMPTY, 0);
         checkDollarsMap();
         log.info("BanknoteStorage is created");
     }
@@ -39,10 +42,8 @@ public class BanknoteStorage {
     }
 
     public long getSumDollars() {
-        AtomicInteger multiplier = new AtomicInteger();
-        BanknotesDenomination[] values = BanknotesDenomination.values();
         log.info("the amount of the banknote storage is displayed");
-        return dollarsMap.values().stream().mapToLong(integer -> integer * values[multiplier.getAndIncrement()].getValue()).sum();
+        return dollarsMap.keySet().stream().mapToLong(key -> key.getValue() * dollarsMap.get(key)).sum();
     }
 
     public HashMap<BanknotesDenomination, Integer> getDollars(BanknotesDenomination denomination, int count) {
@@ -59,12 +60,28 @@ public class BanknoteStorage {
         return dollars;
     }
 
-    public HashMap<BanknotesDenomination, Integer> getMinBillsDollars(int sum) {
+    public HashMap<BanknotesDenomination, Integer> getMinBillsDollars(int sum) throws BanknoteException {
         HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
-        dollars.put(BanknotesDenomination.FIFTY, 1);
-        dollars.put(BanknotesDenomination.TWENTY, 2);
-        dollars.put(BanknotesDenomination.FIVE, 1);
-        dollars.put(BanknotesDenomination.TWO, 2);
+        Integer[] denominations = dollarsMap.keySet().stream().map(BanknotesDenomination::getValue).toArray(Integer[]::new);
+        Arrays.sort(denominations, Collections.reverseOrder());
+        AtomicInteger incrementor = new AtomicInteger();
+        while (sum > 0) {
+            int denomination = denominations[incrementor.getAndIncrement()];
+            if (denomination == 0) throw new BanknoteException("Impossible to give out the requested amount");
+            int billsCount = sum / denomination;
+            if (billsCount == 0) continue;
+            BanknotesDenomination mapKey = dollarsMap.keySet().stream().filter(key -> key.getValue() == denomination).findFirst().get();
+            if (dollarsMap.get(mapKey) >= billsCount) {
+                dollarsMap.put(mapKey, dollarsMap.get(mapKey) - billsCount);
+                dollars.put(mapKey, billsCount);
+                sum -= denomination * billsCount;
+            } else { //если не хватает, то выдаем сколько есть
+                billsCount = dollarsMap.get(mapKey);
+                dollarsMap.put(mapKey, dollarsMap.get(mapKey) - billsCount);
+                dollars.put(mapKey, billsCount);
+                sum -= denomination * billsCount;
+            }
+        }
         return dollars;
     }
 }
