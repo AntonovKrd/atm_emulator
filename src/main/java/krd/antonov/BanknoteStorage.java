@@ -32,6 +32,19 @@ public class BanknoteStorage {
         }
     }
 
+    public void insertDollars(BanknotesDenomination denomination, int count) {
+        if (denomination != BanknotesDenomination.EMPTY) {
+            dollarsMap.put(denomination, dollarsMap.get(denomination) + count);
+            log.info(count + " banknote's " + denomination.name() + " dollar('s)  inserted");
+        } else log.error("bill collector is empty");
+    }
+
+    public long getSumDollars() {
+        AtomicInteger multiplier = new AtomicInteger();
+        log.info("the amount of the banknote storage is displayed");
+        return dollarsMap.values().stream().mapToLong(integer -> integer * denominations[multiplier.getAndIncrement()]).sum();
+    }
+
     public HashMap<BanknotesDenomination, Integer> getDollars(BanknotesDenomination denomination, int count) {
         HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
         if (denomination.equals(BanknotesDenomination.EMPTY) || dollarsMap.get(denomination) == 0
@@ -46,16 +59,12 @@ public class BanknoteStorage {
         return dollars;
     }
 
-    public void insertDollars(BanknotesDenomination denomination, int count) {
-        if (denomination != BanknotesDenomination.EMPTY) {
-            dollarsMap.put(denomination, dollarsMap.get(denomination) + count);
-            log.info(count + " banknote's " + denomination.name() + " dollar('s)  inserted");
-        } else log.error("bill collector is empty");
-    }
-
-    public long getSumDollars() {
-        AtomicInteger multiplier = new AtomicInteger();
-        log.info("the amount of the banknote storage is displayed");
-        return dollarsMap.values().stream().mapToLong(integer -> integer * denominations[multiplier.getAndIncrement()]).sum();
+    public HashMap<BanknotesDenomination, Integer> getMinBillsDollars(int sum) {
+        HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
+        dollars.put(BanknotesDenomination.FIFTY, 1);
+        dollars.put(BanknotesDenomination.TWENTY, 2);
+        dollars.put(BanknotesDenomination.FIVE, 1);
+        dollars.put(BanknotesDenomination.TWO, 2);
+        return dollars;
     }
 }

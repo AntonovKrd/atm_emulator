@@ -1,6 +1,7 @@
 package krd.antonov;
 
 import krd.antonov.exceptions.BanknoteException;
+import krd.antonov.utility.Utility;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,5 +55,33 @@ public class TestBanknoteStorage {
         banknoteStorage.insertDollars(BanknotesDenomination.FIFTY, 2);
         banknoteStorage.insertDollars(BanknotesDenomination.EMPTY, 10);
         assertEquals(dollars, banknoteStorage.getDollars(BanknotesDenomination.FIFTY, 7));
+    }
+
+    @Test
+    public void testConvertMapDollarsToString() {
+        String mapString = "{FIFTY=4}";
+        assertEquals(mapString, Utility.convertMapDollarsToString(banknoteStorage.getDollars(BanknotesDenomination.FIFTY, 4)));
+    }
+
+    @Test
+    public void testValueDenomination() {
+        assertEquals(1, BanknotesDenomination.ONE.getValue());
+        assertEquals(2, BanknotesDenomination.TWO.getValue());
+        assertEquals(5, BanknotesDenomination.FIVE.getValue());
+        assertEquals(10, BanknotesDenomination.TEN.getValue());
+        assertEquals(20, BanknotesDenomination.TWENTY.getValue());
+        assertEquals(50, BanknotesDenomination.FIFTY.getValue());
+        assertEquals(100, BanknotesDenomination.ONE_HUNDRED.getValue());
+        assertEquals(0, BanknotesDenomination.EMPTY.getValue());
+    }
+
+    @Test
+    public void getMinBillsDollars() {
+        HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
+        dollars.put(BanknotesDenomination.FIFTY, 1);
+        dollars.put(BanknotesDenomination.TWENTY, 2);
+        dollars.put(BanknotesDenomination.FIVE, 1);
+        dollars.put(BanknotesDenomination.TWO, 2);
+        assertEquals(dollars, banknoteStorage.getMinBillsDollars(99));
     }
 }
