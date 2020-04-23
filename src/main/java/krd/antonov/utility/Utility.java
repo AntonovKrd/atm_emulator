@@ -10,7 +10,7 @@ public class Utility {
     public static String convertMapDollarsToString(Map<BanknotesDenomination, Integer> map) {
         return map.keySet().stream()
                 .map(key -> key + "=" + map.get(key))
-                .collect(Collectors.joining(", ", "{", "}"));
+                .collect(Collectors.joining(", "));
     }
 
 }

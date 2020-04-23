@@ -34,6 +34,7 @@ public class BanknoteStorage {
     }
 
     public HashMap<BanknotesDenomination, Integer> getAllDollars() {
+        dollarsMap.remove(BanknotesDenomination.EMPTY);
         return dollarsMap;
     }
 
@@ -62,6 +63,7 @@ public class BanknoteStorage {
     }
 
     public HashMap<BanknotesDenomination, Integer> getMinBillsDollars(int sum) throws BanknoteException {
+        if (sum <= 0) throw new BanknoteException("incorrect amount requested");
         HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
         Integer[] denominations = dollarsMap.keySet().stream().map(BanknotesDenomination::getValue).toArray(Integer[]::new);
         Arrays.sort(denominations, Collections.reverseOrder());
