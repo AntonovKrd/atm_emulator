@@ -13,7 +13,7 @@ public class Utility {
         return map.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByKey(Comparator.comparing(BanknotesDenomination::getValue).reversed()))
-                .map(entry -> entry.getKey().getValue() + " - " + entry.getValue())
+                .map(entry -> entry.getKey().getValue() + " dollar(s)  - " + entry.getValue() + " bill(s)")
                 .collect(Collectors.joining(", "));
     }
 

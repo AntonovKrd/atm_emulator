@@ -69,9 +69,9 @@ public class TestBanknoteStorage {
 
     @Test
     public void testConvertMapDollarsToString() throws BanknoteException {
-        String mapString = "50 - 4";
+        String mapString = "50 dollar(s)  - 4 bill(s)";
         assertEquals(mapString, Utility.convertMapDollarsToString(banknoteStorage.getDollars(BanknotesDenomination.FIFTY, 4)));
-        mapString = "50 - 1, 20 - 2, 5 - 1, 2 - 2";
+        mapString = "50 dollar(s)  - 1 bill(s), 20 dollar(s)  - 2 bill(s), 5 dollar(s)  - 1 bill(s), 2 dollar(s)  - 2 bill(s)";
         assertEquals(mapString, Utility.convertMapDollarsToString(banknoteStorage.getMinBillsDollars(99)));
     }
 
