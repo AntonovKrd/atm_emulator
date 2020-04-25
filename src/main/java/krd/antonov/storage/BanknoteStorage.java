@@ -1,6 +1,7 @@
-package krd.antonov;
+package krd.antonov.storage;
 
-import krd.antonov.exceptions.BanknoteException;
+import krd.antonov.storage.exceptions.BanknoteException;
+import krd.antonov.utility.Utility;
 import org.apache.log4j.Logger;
 
 import java.util.Arrays;
@@ -80,6 +81,7 @@ public class BanknoteStorage {
             dollars.put(mapKey, billsCount);
             sum -= denomination * billsCount;
         }
+        log.info(Utility.convertMapDollarsToString(dollars) + " given out");
         return dollars;
     }
 }

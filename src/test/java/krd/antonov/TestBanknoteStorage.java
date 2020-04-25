@@ -1,7 +1,8 @@
 package krd.antonov;
 
-import krd.antonov.exceptions.BanknoteException;
-import krd.antonov.utility.Utility;
+import krd.antonov.storage.BanknoteStorage;
+import krd.antonov.storage.BanknotesDenomination;
+import krd.antonov.storage.exceptions.BanknoteException;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,14 +66,6 @@ public class TestBanknoteStorage {
         assertEquals(dollars, banknoteStorage.getDollars(BanknotesDenomination.FIFTY, 7));
         assertThrows(BanknoteException.class, () -> banknoteStorage.insertDollars(BanknotesDenomination.FIFTY, 0));
         assertThrows(BanknoteException.class, () -> banknoteStorage.insertDollars(BanknotesDenomination.EMPTY, 10));
-    }
-
-    @Test
-    public void testConvertMapDollarsToString() throws BanknoteException {
-        String mapString = "50 dollar(s)  - 4 bill(s)";
-        assertEquals(mapString, Utility.convertMapDollarsToString(banknoteStorage.getDollars(BanknotesDenomination.FIFTY, 4)));
-        mapString = "50 dollar(s)  - 1 bill(s), 20 dollar(s)  - 2 bill(s), 5 dollar(s)  - 1 bill(s), 2 dollar(s)  - 2 bill(s)";
-        assertEquals(mapString, Utility.convertMapDollarsToString(banknoteStorage.getMinBillsDollars(99)));
     }
 
     @Test

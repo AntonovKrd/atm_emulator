@@ -1,4 +1,4 @@
-package krd.antonov;
+package krd.antonov.storage;
 
 public enum BanknotesDenomination {
     ONE(1),
@@ -11,7 +11,7 @@ public enum BanknotesDenomination {
     EMPTY(0);
     private final int value;
 
-    private BanknotesDenomination(int value) {
+    BanknotesDenomination(int value) {
         this.value = value;
     }
 
