@@ -1,9 +1,11 @@
 package krd.antonov.view;
 
 import krd.antonov.storage.BanknoteStorage;
+import krd.antonov.storage.exceptions.BanknoteException;
 import krd.antonov.utility.Utility;
 import org.apache.log4j.Logger;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class CommandProcessor {
@@ -22,6 +24,19 @@ public class CommandProcessor {
         return matches[0];
     }
 
+    private boolean processingCommandInsert(String command) {
+        List<Integer> params = Utility.getNumbersFromString(command);
+        boolean result = false;
+        if (params.size() == 2 && Utility.isDenominationCorrect(params.get(0))) {
+            try {
+                storage.insertDollars(Utility.getDenominationByValue(params.get(0)), params.get(1));
+                result = true;
+            } catch (BanknoteException e) {
+                log.error(e);
+            }
+        }
+        return result;
+    }
 
     public void launchWorkWithStorage() {
         Scanner in = new Scanner(System.in);
@@ -43,6 +58,12 @@ public class CommandProcessor {
                 System.out.println(storage.getSumDollars() + " dollars");
                 break;
             case ("insert"):
+                if (processingCommandInsert(command))
+                    System.out.println("insert success");
+                else
+                    System.out.println("Insert error. Check the correctness of the command and parameters.");
+                break;
+            case ("getDollars"):
                 break;
         }
     }
