@@ -45,35 +45,31 @@
         <finalName>${project.name}</finalName>
         <plugins>
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider</artifactId>
-                        <version>1.1.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>my-maven-assembly-plugin</id>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-                <configuration>
 
-                    <appendAssemblyId>false</appendAssemblyId>
+                <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+
                     <archive>
-                        <manifest>Main</manifest>
+                        <manifest>
+                            <mainClass>krd.antonov.view.View</mainClass>
+                        </manifest>
                     </archive>
                 </configuration>
+
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
