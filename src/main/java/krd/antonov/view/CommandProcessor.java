@@ -1,13 +1,9 @@
 package krd.antonov.view;
 
 import krd.antonov.storage.BanknoteStorage;
-import krd.antonov.storage.BanknotesDenomination;
-import krd.antonov.storage.exceptions.BanknoteException;
 import krd.antonov.utility.Utility;
 import org.apache.log4j.Logger;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class CommandProcessor {
@@ -21,8 +17,15 @@ public class CommandProcessor {
         System.out.println("Current balance : " + Utility.convertMapDollarsToString(storage.getAllDollars()));
     }
 
+    private String getCommandKey(String command) {
+        String[] matches = command.split(" ");
+        return matches[0];
+    }
+
+
     public void launchWorkWithStorage() {
         Scanner in = new Scanner(System.in);
+        printOperations();
         while (true) {
             System.out.print("input command : ");
             String command = in.nextLine();
@@ -31,8 +34,8 @@ public class CommandProcessor {
     }
 
     public void commandProcessing(String command) {
-        String prefix = command.trim().substring(0, command.indexOf(" "));
-        switch (prefix) {
+        String key = getCommandKey(command);
+        switch (key) {
             case ("balance"):
                 System.out.println("Current balance : " + Utility.convertMapDollarsToString(storage.getAllDollars()));
                 break;
@@ -40,20 +43,7 @@ public class CommandProcessor {
                 System.out.println(storage.getSumDollars() + " dollars");
                 break;
             case ("insert"):
-                List<Integer> params = Utility.getNumbersFromString(command);
-                try {
-                    if (params.size() != 2)
-                        System.out.println("Error reading parameters. Check the command correctly.");
-                    else {
-                        storage.insertDollars(Arrays.stream(BanknotesDenomination.values())
-                                .filter(denomination -> denomination.getValue() == params.get(0))
-                                .findFirst().get(), params.get(1));
-                        System.out.println("Success insert dollars");
-                    }
-                } catch (BanknoteException e) {
-                    System.out.println(e.getMessage());
-                    log.error(e);
-                }
+                break;
         }
     }
 
@@ -67,5 +57,6 @@ public class CommandProcessor {
         System.out.println("Denominations : 1, 2, 5, 10, 20, 50, 100");
         System.out.println("'list' - print available operations");
     }
+
 
 }
