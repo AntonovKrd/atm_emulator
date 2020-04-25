@@ -10,8 +10,4 @@ public class View {
         CommandProcessor processor = new CommandProcessor(storage);
         processor.launchWorkWithStorage();
     }
-
-
-
-
 }

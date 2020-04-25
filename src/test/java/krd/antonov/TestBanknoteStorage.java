@@ -17,29 +17,25 @@ public class TestBanknoteStorage {
     private static BanknoteStorage banknoteStorage;
 
     @BeforeEach
-    public void init() {
-        try {
-            banknoteStorage = new BanknoteStorage(5, 5, 5, 5, 5, 5, 5);
-        } catch (BanknoteException e) {
-            log.error("Error create BanknoteStorage", e);
-        }
+    void init() throws BanknoteException {
+        banknoteStorage = new BanknoteStorage(5, 5, 5, 5, 5, 5, 5);
     }
 
     @Test
-    public void testCheckCorrectInitBanknoteStorage() {
+    void testCheckCorrectInitBanknoteStorage() {
         assertThrows(BanknoteException.class, () -> {
             BanknoteStorage banknoteStorage = new BanknoteStorage(-1, 5, 5, 5, 5, 5, 5);
         });
     }
 
     @Test
-    public void testGetAllDollars() throws BanknoteException {
+    void testGetAllDollars() throws BanknoteException {
         assertEquals(new BanknoteStorage(5, 5, 5, 5, 5, 5, 5)
                 .getAllDollars(), banknoteStorage.getAllDollars());
     }
 
     @Test
-    public void testGetDollars() throws BanknoteException {
+    void testGetDollars() throws BanknoteException {
         HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
         dollars.put(BanknotesDenomination.ONE, 2);
         assertEquals(dollars, banknoteStorage.getDollars(BanknotesDenomination.ONE, 2));
@@ -53,13 +49,13 @@ public class TestBanknoteStorage {
     }
 
     @Test
-    public void testGetSumDollars() {
+    void testGetSumDollars() {
         long sumDollars = 5 + (2 * 5) + (5 * 5) + (10 * 5) + (20 * 5) + (50 * 5) + (100 * 5);
         assertEquals(sumDollars, banknoteStorage.getSumDollars());
     }
 
     @Test
-    public void testInsertDollars() throws BanknoteException {
+    void testInsertDollars() throws BanknoteException {
         HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
         dollars.put(BanknotesDenomination.FIFTY, 7);
         banknoteStorage.insertDollars(BanknotesDenomination.FIFTY, 2);
@@ -69,7 +65,7 @@ public class TestBanknoteStorage {
     }
 
     @Test
-    public void testValueDenomination() {
+    void testValueDenomination() {
         assertEquals(1, BanknotesDenomination.ONE.getValue());
         assertEquals(2, BanknotesDenomination.TWO.getValue());
         assertEquals(5, BanknotesDenomination.FIVE.getValue());
@@ -81,7 +77,7 @@ public class TestBanknoteStorage {
     }
 
     @Test
-    public void testGetMinBillsDollars() throws BanknoteException {
+    void testGetMinBillsDollars() throws BanknoteException {
         HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
         dollars.put(BanknotesDenomination.FIFTY, 1);
         dollars.put(BanknotesDenomination.TWENTY, 2);
@@ -91,7 +87,7 @@ public class TestBanknoteStorage {
     }
 
     @Test
-    public void testGetMinBillsDollarsOver() {
+    void testGetMinBillsDollarsOver() {
         assertThrows(BanknoteException.class, () -> banknoteStorage.getMinBillsDollars(941));
         assertThrows(BanknoteException.class, () -> banknoteStorage.getMinBillsDollars(0));
         assertThrows(BanknoteException.class, () -> banknoteStorage.getMinBillsDollars(-1));

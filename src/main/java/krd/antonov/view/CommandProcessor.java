@@ -6,6 +6,7 @@ import krd.antonov.utility.Utility;
 import org.apache.log4j.Logger;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class CommandProcessor {
@@ -14,15 +15,23 @@ public class CommandProcessor {
     private static final String errorInput = "Bad command. Check the correctness of the command and parameters.";
     private final BanknoteStorage storage;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommandProcessor processor = (CommandProcessor) o;
+        return Objects.equals(storage, processor.storage);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(storage);
+    }
+
     public CommandProcessor(BanknoteStorage storage) {
         this.storage = storage;
         System.out.println("Virtual dollar storage is open!");
         System.out.println("Current balance : " + Utility.convertMapDollarsToString(storage.getAllDollars()));
-    }
-
-    private String getCommandKey(String command) {
-        String[] matches = command.split(" ");
-        return matches[0];
     }
 
     private String processingCommandInsert(String command) {
@@ -73,7 +82,7 @@ public class CommandProcessor {
     }
 
     public void commandProcessing(String command) {
-        String key = getCommandKey(command);
+        String key = Utility.getCommandKey(command);
         switch (key) {
             case ("balance"):
                 System.out.println("Current balance : " + Utility.convertMapDollarsToString(storage.getAllDollars()));

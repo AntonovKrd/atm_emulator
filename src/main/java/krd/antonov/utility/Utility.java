@@ -33,4 +33,9 @@ public class Utility {
     public static BanknotesDenomination getDenominationByValue(int value) {
         return Arrays.stream(BanknotesDenomination.values()).filter(banknoteDenomination -> banknoteDenomination.getValue() == value).findFirst().get();
     }
+
+    public static String getCommandKey(String command) {
+        String[] matches = command.split(" ");
+        return matches[0];
+    }
 }
