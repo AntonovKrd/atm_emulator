@@ -35,8 +35,9 @@ public class BanknoteStorage {
     }
 
     public HashMap<BanknotesDenomination, Integer> getAllDollars() {
-        dollarsMap.remove(BanknotesDenomination.EMPTY);
-        return dollarsMap;
+        HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>(dollarsMap);
+        dollars.remove(BanknotesDenomination.EMPTY);
+        return dollars;
     }
 
     public void insertDollars(BanknotesDenomination denomination, int count) throws BanknoteException {
@@ -71,7 +72,8 @@ public class BanknoteStorage {
         AtomicInteger incrementor = new AtomicInteger();
         while (sum > 0) {
             int denomination = denominations[incrementor.getAndIncrement()];
-            if (denomination == 0) throw new BanknoteException("Impossible to give out the requested amount");
+            if (denomination == 0)
+                throw new BanknoteException("Impossible to give out the requested amount. Not enough bills.");
             int billsCount = sum / denomination;
             if (billsCount == 0) continue;
             BanknotesDenomination mapKey = dollarsMap.keySet().stream().filter(key -> key.getValue() == denomination).findFirst().get();

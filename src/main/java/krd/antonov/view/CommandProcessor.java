@@ -11,7 +11,8 @@ import java.util.Scanner;
 public class CommandProcessor {
 
     private static final Logger log = Logger.getLogger(CommandProcessor.class);
-    private BanknoteStorage storage;
+    private static final String errorInput = "Bad command. Check the correctness of the command and parameters.";
+    private final BanknoteStorage storage;
 
     public CommandProcessor(BanknoteStorage storage) {
         this.storage = storage;
@@ -24,15 +25,38 @@ public class CommandProcessor {
         return matches[0];
     }
 
-    private boolean processingCommandInsert(String command) {
+    private String processingCommandInsert(String command) {
         List<Integer> params = Utility.getNumbersFromString(command);
-        boolean result = false;
+        String result = errorInput;
         if (params.size() == 2 && Utility.isDenominationCorrect(params.get(0))) {
             try {
                 storage.insertDollars(Utility.getDenominationByValue(params.get(0)), params.get(1));
-                result = true;
+                result = "insert success";
             } catch (BanknoteException e) {
                 log.error(e);
+                result = e.getMessage();
+            }
+        }
+        return result;
+    }
+
+    private String processingCommandGetDollars(String command) {
+        List<Integer> params = Utility.getNumbersFromString(command);
+        String result = errorInput;
+        if (params.size() == 2 && Utility.isDenominationCorrect(params.get(0))) {
+            try {
+                result = Utility.convertMapDollarsToString(storage.getDollars(Utility.getDenominationByValue(params.get(0)), params.get(1))) + " given out";
+            } catch (BanknoteException e) {
+                log.error(e);
+                result = e.getMessage();
+            }
+        }
+        if (params.size() == 1) {
+            try {
+                result = Utility.convertMapDollarsToString(storage.getMinBillsDollars(params.get(0))) + " given out";
+            } catch (BanknoteException e) {
+                log.error(e);
+                result = e.getMessage();
             }
         }
         return result;
@@ -58,13 +82,19 @@ public class CommandProcessor {
                 System.out.println(storage.getSumDollars() + " dollars");
                 break;
             case ("insert"):
-                if (processingCommandInsert(command))
-                    System.out.println("insert success");
-                else
-                    System.out.println("Insert error. Check the correctness of the command and parameters.");
+                System.out.println(processingCommandInsert(command));
                 break;
             case ("getDollars"):
+                System.out.println(processingCommandGetDollars(command));
                 break;
+            case ("list"):
+                printOperations();
+                break;
+            case ("exit"):
+                System.exit(0);
+                break;
+            default:
+                System.out.println(errorInput);
         }
     }
 
@@ -77,6 +107,7 @@ public class CommandProcessor {
         System.out.println("'getDollars %sum%' - issuing money with the minimum available number of bills");
         System.out.println("Denominations : 1, 2, 5, 10, 20, 50, 100");
         System.out.println("'list' - print available operations");
+        System.out.println("'exit' - close program");
     }
 
 
