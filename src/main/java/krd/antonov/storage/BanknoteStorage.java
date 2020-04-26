@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class BanknoteStorage {
     private final static Logger log = Logger.getLogger(BanknoteStorage.class);
-    private final HashMap<BanknotesDenomination, Integer> dollarsMap;
+    private HashMap<BanknotesDenomination, Integer> dollarsMap;
 
     public BanknoteStorage(int oneDollarsCount, int twoDollarsCount, int fiveDollarsCount, int tenDollarsCount,
                            int twentyDollarsCount, int fiftyDollarsCount, int oneHundredDollarsCount) throws BanknoteException {
@@ -66,8 +66,9 @@ public class BanknoteStorage {
 
     public HashMap<BanknotesDenomination, Integer> getMinBillsDollars(int sum) throws BanknoteException {
         if (sum <= 0) throw new BanknoteException("incorrect amount requested");
+        HashMap<BanknotesDenomination, Integer> copyDollarsMap = new HashMap<>(dollarsMap);
         HashMap<BanknotesDenomination, Integer> dollars = new HashMap<>();
-        Integer[] denominations = dollarsMap.keySet().stream().map(BanknotesDenomination::getValue).toArray(Integer[]::new);
+        Integer[] denominations = copyDollarsMap.keySet().stream().map(BanknotesDenomination::getValue).toArray(Integer[]::new);
         Arrays.sort(denominations, Collections.reverseOrder());
         AtomicInteger incrementor = new AtomicInteger();
         while (sum > 0) {
@@ -76,13 +77,14 @@ public class BanknoteStorage {
                 throw new BanknoteException("Impossible to give out the requested amount. Not enough bills.");
             int billsCount = sum / denomination;
             if (billsCount == 0) continue;
-            BanknotesDenomination mapKey = dollarsMap.keySet().stream().filter(key -> key.getValue() == denomination).findFirst().get();
-            if (dollarsMap.get(mapKey) < billsCount)
-                billsCount = dollarsMap.get(mapKey); //if not enough, take how much is
-            dollarsMap.put(mapKey, dollarsMap.get(mapKey) - billsCount);
+            BanknotesDenomination mapKey = copyDollarsMap.keySet().stream().filter(key -> key.getValue() == denomination).findFirst().get();
+            if (copyDollarsMap.get(mapKey) < billsCount)
+                billsCount = copyDollarsMap.get(mapKey); //if not enough, take how much is
+            copyDollarsMap.put(mapKey, copyDollarsMap.get(mapKey) - billsCount);
             dollars.put(mapKey, billsCount);
             sum -= denomination * billsCount;
         }
+        dollarsMap = copyDollarsMap;
         log.info(Utility.convertMapDollarsToString(dollars) + " given out");
         return dollars;
     }

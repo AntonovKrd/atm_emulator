@@ -91,5 +91,8 @@ public class TestBanknoteStorage {
         assertThrows(BanknoteException.class, () -> banknoteStorage.getMinBillsDollars(941));
         assertThrows(BanknoteException.class, () -> banknoteStorage.getMinBillsDollars(0));
         assertThrows(BanknoteException.class, () -> banknoteStorage.getMinBillsDollars(-1));
+        long sumDollars = 5 + (2 * 5) + (5 * 5) + (10 * 5) + (20 * 5) + (50 * 5) + (100 * 5);
+        assertEquals(sumDollars, banknoteStorage.getSumDollars());
     }
+
 }
