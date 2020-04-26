@@ -52,7 +52,7 @@ public class BanknoteStorage {
 
     public long getSumDollars() {
         log.info("the amount of the banknote storage is displayed");
-        return dollarsMap.keySet().stream().mapToLong(key -> key.getValue() * dollarsMap.get(key)).sum();
+        return dollarsMap.keySet().stream().mapToLong(key -> key.getValue() * dollarsMap.get(key).longValue()).sum();
     }
 
     public HashMap<BanknotesDenomination, Integer> getDollars(BanknotesDenomination denomination, int count) throws BanknoteException {

@@ -49,9 +49,12 @@ public class TestBanknoteStorage {
     }
 
     @Test
-    void testGetSumDollars() {
-        long sumDollars = 5 + (2 * 5) + (5 * 5) + (10 * 5) + (20 * 5) + (50 * 5) + (100 * 5);
-        assertEquals(sumDollars, banknoteStorage.getSumDollars());
+    void testGetSumDollars() throws BanknoteException {
+        long sumDollars = Integer.MAX_VALUE + (2L * Integer.MAX_VALUE) + (5L * Integer.MAX_VALUE) + (10L * Integer.MAX_VALUE)
+                + (20L * Integer.MAX_VALUE) + (50L * Integer.MAX_VALUE) + (100L * Integer.MAX_VALUE);
+        BanknoteStorage storage = new BanknoteStorage(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE,
+                Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        assertEquals(sumDollars, storage.getSumDollars());
     }
 
     @Test
