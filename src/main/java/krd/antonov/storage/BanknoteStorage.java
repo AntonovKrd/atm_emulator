@@ -42,8 +42,11 @@ public class BanknoteStorage {
 
     public void insertDollars(BanknotesDenomination denomination, int count) throws BanknoteException {
         if (denomination != BanknotesDenomination.EMPTY && count > 0) {
-            dollarsMap.put(denomination, dollarsMap.get(denomination) + count);
-            log.info(count + " banknote's " + denomination.name() + " dollar('s)  inserted");
+            long countBills = dollarsMap.get(denomination).longValue() + count;
+            if (countBills < Integer.MAX_VALUE) {
+                dollarsMap.put(denomination, dollarsMap.get(denomination) + count);
+                log.info(count + " banknote's " + denomination.name() + " dollar('s)  inserted");
+            } else throw new BanknoteException("storage is overflow");
         } else throw new BanknoteException("bill collector is empty");
     }
 

@@ -62,6 +62,7 @@ public class TestBanknoteStorage {
         assertEquals(dollars, banknoteStorage.getDollars(BanknotesDenomination.FIFTY, 7));
         assertThrows(BanknoteException.class, () -> banknoteStorage.insertDollars(BanknotesDenomination.FIFTY, 0));
         assertThrows(BanknoteException.class, () -> banknoteStorage.insertDollars(BanknotesDenomination.EMPTY, 10));
+        assertThrows(BanknoteException.class, () -> banknoteStorage.insertDollars(BanknotesDenomination.ONE, Integer.MAX_VALUE));
     }
 
     @Test
