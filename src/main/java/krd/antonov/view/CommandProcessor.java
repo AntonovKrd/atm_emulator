@@ -115,6 +115,7 @@ public class CommandProcessor {
         System.out.println("'getDollars %denomination% - %number of bills%' - issuing money in equal denominations");
         System.out.println("'getDollars %sum%' - issuing money with the minimum available number of bills");
         System.out.println("Denominations : 1, 2, 5, 10, 20, 50, 100");
+        System.out.println("Maximum number of bills in each cell - " + Integer.MAX_VALUE);
         System.out.println("'list' - print available operations");
         System.out.println("'exit' - close program");
     }

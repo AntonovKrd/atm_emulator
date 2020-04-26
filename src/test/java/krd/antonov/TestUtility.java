@@ -32,6 +32,9 @@ public class TestUtility {
         numbers.add(100);
         numbers.add(7642);
         assertEquals(numbers, Utility.getNumbersFromString("getDollars   100 -     7642"));
+        numbers.clear();
+        assertEquals(numbers, Utility.getNumbersFromString("getDollars   100 -     " + Integer.MAX_VALUE + 1));
+        assertEquals(numbers, Utility.getNumbersFromString("getDollars   " + Integer.MAX_VALUE + 1 + " -     7642"));
     }
 
     @Test

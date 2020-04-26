@@ -18,11 +18,20 @@ public class Utility {
                 .collect(Collectors.joining(", "));
     }
 
+    /**
+     * @param resource - string with numbers
+     * @return List<Integer> params from string. If any param is greater than Integer.Max return Empty List
+     */
     public static List<Integer> getNumbersFromString(String resource) {
         Pattern pattern = Pattern.compile("[-]?[0-9]+");
         Matcher matcher = pattern.matcher(resource);
         List<Integer> numbers = new ArrayList<>();
-        while (matcher.find()) numbers.add(Integer.parseInt(matcher.group()));
+        while (matcher.find())
+            try {
+                numbers.add(Integer.parseInt(matcher.group()));
+            } catch (NumberFormatException exception) {
+                return new ArrayList<>();
+            }
         return numbers;
     }
 
