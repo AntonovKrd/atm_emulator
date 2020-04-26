@@ -30,8 +30,8 @@ public class CommandProcessor {
 
     public CommandProcessor(BanknoteStorage storage) {
         this.storage = storage;
-        System.out.println("Virtual dollar storage is open!");
-        System.out.println("Current balance : " + Utility.convertMapDollarsToString(storage.getAllDollars()));
+        System.out.println("Virtual dollar storage is open!" + System.lineSeparator());
+        System.out.println("Current balance : " + Utility.convertMapDollarsToString(storage.getAllDollars()) + System.lineSeparator());
     }
 
     private String processingCommandInsert(String command) {
